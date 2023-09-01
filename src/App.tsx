@@ -18,14 +18,12 @@ import {
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {NavigationContainer} from '@react-navigation/native';
 import {DashBoardScreen, HomeScreen, LoginScreen} from './containers';
-import {UserContext, UserProvider} from './context/UserContext';
+import {MyContextProvider, useMyContext} from './context/MyContext';
 
 const Stack = createNativeStackNavigator();
 
-function App(): JSX.Element {
-  const [isUserloggedin, setIsuserlogged] = useState(false);
-
-  // const {isUserloggedin, setIsuserlogged} = useContext(UserContext);
+const Nav = () => {
+  const {isLogin} = useMyContext();
 
   const getAuthStack = () => {
     return (
@@ -38,24 +36,30 @@ function App(): JSX.Element {
   const getMainStack = () => {
     return (
       <Stack.Group>
-        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{title: 'Overivew'}}
+        />
         <Stack.Screen name="Dashboard" component={DashBoardScreen} />
       </Stack.Group>
     );
   };
 
   return (
-    <>
-      <UserContext.Provider value={{setIsuserlogged}}>
-        {/* <UserProvider > */}
-        <NavigationContainer>
-          <Stack.Navigator>
-            {isUserloggedin ? getMainStack() : getAuthStack()}
-          </Stack.Navigator>
-        </NavigationContainer>
-        {/* </UserProvider> */}
-      </UserContext.Provider>
-    </>
+    <Stack.Navigator>
+      {isLogin ? getMainStack() : getAuthStack()}
+    </Stack.Navigator>
+  );
+};
+
+function App(): JSX.Element {
+  return (
+    <MyContextProvider>
+      <NavigationContainer>
+        <Nav />
+      </NavigationContainer>
+    </MyContextProvider>
   );
 }
 

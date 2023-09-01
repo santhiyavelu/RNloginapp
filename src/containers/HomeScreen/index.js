@@ -1,10 +1,10 @@
 import {useState, useContext} from 'react';
 import {View, Text, TouchableOpacity, TextInput} from 'react-native';
-import {UserContext} from '../../context/UserContext';
+import {useMyContext} from '../../context/MyContext';
 import styles from './styles';
 
 const HomeScreen = ({navigation}) => {
-  const {setIsuserlogged} = useContext(UserContext);
+  const {updateData} = useMyContext();
 
   return (
     <View>
@@ -20,7 +20,7 @@ const HomeScreen = ({navigation}) => {
       <TouchableOpacity
         style={styles.submit}
         onPress={() => {
-          setIsuserlogged(false);
+          updateData(false);
         }}>
         <Text style={styles.buttontext}>LOG OUT</Text>
       </TouchableOpacity>
